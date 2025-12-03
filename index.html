@@ -1,0 +1,234 @@
+<!-- index.html - MasterMind Academy (collégiens) -->
+<!-- Collez ce code dans la section HTML de JSFiddle -->
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MasterMind Academy</title>
+  <!-- Aptos si disponible sur l'appareil / sinon système -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Note: Aptos peut ne pas être disponible via Google Fonts; fallback en CSS -->
+  <!-- Favicon simple -->
+  <style> :root{--mm-accent:#1bd3a6} </style>
+</head>
+<body class="theme-light" id="app">
+  <!-- HEADER -->
+  <header class="topbar">
+    <div class="brand">
+      <img src="https://i.imgur.com/3XHkq3M.png" alt="logo" class="logo" />
+      <h1>MasterMind Academy</h1>
+    </div>
+    <nav class="nav">
+      <input id="search-input" placeholder="Rechercher : ex. fractions, révision verbe..." />
+      <button id="btn-search">🔎</button>
+      <div class="user-area">
+        <button id="btn-signin" class="btn">Se connecter / S'inscrire</button>
+        <button id="btn-settings" title="Réglages">⚙️</button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- MAIN LAYOUT -->
+  <main class="container">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <ul class="menu">
+        <li data-section="courses" class="active">Cours & Fiches</li>
+        <li data-section="quiz">Quiz / Exercices</li>
+        <li data-section="progress">Suivi & Progression</li>
+        <li data-section="search">Recherche dédiée</li>
+        <li data-section="account">Réglages / Compte</li>
+      </ul>
+
+      <div class="level-select">
+        <label>Niveau :</label>
+        <select id="select-level">
+          <option value="6e">6e</option>
+          <option value="5e">5e</option>
+          <option value="4e">4e</option>
+          <option value="3e">3e</option>
+          <option value="brevet">Brevet</option>
+        </select>
+      </div>
+
+      <div class="progress-card">
+        <h3>Livres acquis</h3>
+        <div id="books-display">0 📚</div>
+        <div id="rank-display">Niveau : Débutant</div>
+      </div>
+    </aside>
+
+    <!-- CONTENT -->
+    <section class="content" id="main-content">
+      <!-- welcome / first-run tutorial triggers -->
+      <div class="welcome-card">
+        <h2 id="welcome-title">Bienvenue sur MasterMind Academy</h2>
+        <p id="welcome-sub">Aide aux collégiens — cours, fiches, quiz et progression.</p>
+        <button id="start-tutorial" class="primary">Lancer le tutoriel initial</button>
+      </div>
+
+      <!-- Courses / Fiches -->
+      <div class="section" id="section-courses" data-visible>
+        <div class="tools-row">
+          <div class="filters">
+            <select id="filter-matter"><option value="all">Toutes les matières</option></select>
+            <select id="filter-type"><option value="all">Tous types</option><option value="fiche">Fiche</option><option value="video">Vidéo</option><option value="article">Article</option></select>
+            <button id="btn-new-fiche">Exporter / Imprimer la fiche</button>
+          </div>
+        </div>
+
+        <div id="courses-grid" class="grid">
+          <!-- cards are injected by JS -->
+        </div>
+      </div>
+
+      <!-- Quiz -->
+      <div class="section" id="section-quiz" hidden>
+        <h2>Quiz rapide</h2>
+        <div id="quiz-card" class="card">
+          <div id="quiz-question">Charge...</div>
+          <div id="quiz-answers"></div>
+          <div class="quiz-footer">
+            <button id="btn-next">Suivant</button>
+            <div id="quiz-score">Score: 0</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Progress -->
+      <div class="section" id="section-progress" hidden>
+        <h2>Suivi & récompenses</h2>
+        <div id="progress-area">
+          <div class="books-visual" id="books-visual"></div>
+          <ul id="progress-log"></ul>
+        </div>
+      </div>
+
+      <!-- Search -->
+      <div class="section" id="section-search" hidden>
+        <h2>Recherche</h2>
+        <input id="search-box" placeholder="Rechercher par mot-clé..." />
+        <div id="search-results" class="grid"></div>
+      </div>
+
+      <!-- Account / Settings -->
+      <div class="section" id="section-account" hidden>
+        <h2>Compte & Réglages</h2>
+        <div class="card">
+          <form id="account-form">
+            <label>Nom</label><input id="acc-lastname" required />
+            <label>Prénom</label><input id="acc-firstname" required />
+            <label>Email</label><input id="acc-email" type="email" required />
+            <label>Mot de passe</label><input id="acc-pass" type="password" required />
+            <label>Date de naissance</label><input id="acc-dob" type="date" required />
+            <label>Langue interface</label>
+            <select id="acc-lang"><option value="fr">Français</option><option value="en">English</option><option value="es">Español</option><option value="zh">中文</option></select>
+            <label>Thème</label>
+            <select id="acc-theme"><option value="light">Clair</option><option value="dark">Sombre</option></select>
+            <div class="form-actions">
+              <button type="button" id="btn-save-account" class="primary">Sauvegarder</button>
+              <button type="button" id="btn-delete-account" class="danger">Supprimer le compte</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="tools-card">
+          <h3>Outils intégrés</h3>
+          <div class="tool-grid">
+            <button class="tool" id="open-calc">Calculatrice</button>
+            <button class="tool" id="open-dict">Dictionnaire / Traduction</button>
+            <button class="tool" id="open-formulas">Tableau formules</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div>© <span id="creator">Noah MARTINO</span> — MasterMind Academy</div>
+    <div class="legal">Accessible à partir de 10 ans • Tutoriel initial obligatoire</div>
+  </footer>
+
+  <!-- MODALS & TUTORIAL OVERLAY -->
+  <div id="overlay" class="overlay hidden">
+    <div class="tutorial-card" id="tutorial-card">
+      <img src="https://i.imgur.com/3e8g6n1.png" alt="pingouin" class="penguin" />
+      <h3 id="tut-title">Bonjour ! Je suis Pingouin IA</h3>
+      <p id="tut-text">Je vais te montrer les fonctions principales. Utilise les flèches pour avancer.</p>
+      <div class="tut-controls">
+        <button id="tut-prev">◀</button>
+        <button id="tut-next" class="primary">▶</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIGNUP / VERIFY MODAL -->
+  <div id="modal-signup" class="modal hidden">
+    <div class="modal-content">
+      <h3>Créer un compte</h3>
+      <form id="signup-form">
+        <label>Email*</label><input id="su-email" type="email" required />
+        <label>Nom*</label><input id="su-lastname" required />
+        <label>Prénom*</label><input id="su-firstname" required />
+        <label>Mot de passe*</label><input id="su-pass" type="password" required minlength="6" />
+        <label>Date de naissance*</label><input id="su-dob" type="date" required />
+        <label>Niveau*</label>
+        <select id="su-level"><option value="6e">6e</option><option value="5e">5e</option><option value="4e">4e</option><option value="3e">3e</option><option value="brevet">Brevet</option></select>
+        <div class="form-actions">
+          <button type="button" id="btn-create" class="primary">S'inscrire</button>
+          <button type="button" id="btn-cancel">Annuler</button>
+        </div>
+      </form>
+      <div id="email-verif" class="hidden">
+        <p>Un code de vérification a été envoyé à <span id="verif-email"></span> (simulé).</p>
+        <input id="verif-code" placeholder="Entrez le code (123456)" />
+        <button id="btn-verify" class="primary">Vérifier</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIMPLE WIDGETS -->
+  <div id="calc-modal" class="modal hidden">
+    <div class="modal-content">
+      <h3>Calculatrice</h3>
+      <input id="calc-display" />
+      <div class="calc-buttons">
+        <button data-val="7">7</button><button data-val="8">8</button><button data-val="9">9</button><button data-val="/">÷</button>
+        <button data-val="4">4</button><button data-val="5">5</button><button data-val="6">6</button><button data-val="*">×</button>
+        <button data-val="1">1</button><button data-val="2">2</button><button data-val="3">3</button><button data-val="-">-</button>
+        <button data-val="0">0</button><button data-val=".">.</button><button id="calc-eq">=</button><button data-val="+">+</button>
+      </div>
+      <button id="close-calc">Fermer</button>
+    </div>
+  </div>
+
+  <div id="dict-modal" class="modal hidden">
+    <div class="modal-content">
+      <h3>Dictionnaire / Traduction</h3>
+      <input id="dict-word" placeholder="Mot à chercher" />
+      <select id="dict-to"><option value="fr-en">Fr → En</option><option value="fr-es">Fr → Es</option><option value="fr-zh">Fr → Zh</option></select>
+      <button id="dict-search">Chercher</button>
+      <div id="dict-result"></div>
+      <button id="close-dict">Fermer</button>
+    </div>
+  </div>
+
+  <div id="form-modal" class="modal hidden">
+    <div class="modal-content">
+      <h3>Tableau de formules (exemple)</h3>
+      <ul>
+        <li>Surface rectangle : S = L × l</li>
+        <li>Périmètre cercle : P = 2πr</li>
+        <li>Vitesse : v = d / t</li>
+      </ul>
+      <button id="close-form">Fermer</button>
+    </div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script src="script.js"></script>
+</body>
+</html>
